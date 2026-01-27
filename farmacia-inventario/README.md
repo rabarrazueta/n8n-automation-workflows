@@ -327,7 +327,7 @@ RECOMENDACIÓN: Realizar configuración desde web n8n.
 
 
 
-##Personalizaciones Comunes
+## Personalizaciones Comunes
 
 
 
