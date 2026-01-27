@@ -320,6 +320,7 @@ Las variables se configuran en tu instancia n8n, no en archivos locales.
 
 El workflow se ejecutará automáticamente todos los días a las 8:00 AM.
 
+```
 
 
 RECOMENDACIÓN: Realizar configuración desde web n8n.
