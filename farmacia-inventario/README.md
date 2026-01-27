@@ -92,7 +92,7 @@ Los resultados se envían automáticamente vía **Telegram** al responsable de c
 
 
 
-![Mensaje de Telegram](./demo-alert.png)
+![Mensaje de Telegram](./demo-warning.png)
 
 
 
