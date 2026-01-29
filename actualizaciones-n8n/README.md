@@ -1,4 +1,4 @@
-\# Alerta de Actualizaciones de n8n (GitHub Releases → Email)
+# Alerta de Actualizaciones de n8n (GitHub Releases → Email)
 
 
 
@@ -6,7 +6,7 @@ Workflow n8n que monitorea la última versión estable publicada de n8n en GitHu
 
 
 
-\## Problema de Negocio
+## Problema de Negocio
 
 
 
@@ -24,7 +24,7 @@ El problema típico: las actualizaciones se revisan “a mano”, de forma irreg
 
 
 
-\## Solución Implementada
+## Solución Implementada
 
 
 
@@ -34,17 +34,17 @@ Workflow automatizado con ejecución programada que:
 
 2\. Consulta el último release estable en GitHub (endpoint `/repos/n8n-io/n8n/releases/latest`).
 
-3\. Compara el `tag\_name` del release con la versión instalada.
+3\. Compara el `tag_name` del release con la versión instalada.
 
 4\. Si detecta una nueva versión, envía un correo de aviso (Gmail node) al destinatario configurado.
 
 
 
-\## Arquitectura del Flujo
+## Arquitectura del Flujo
 
 
 
-\### Componentes Técnicos
+### Componentes Técnicos
 
 
 
@@ -58,13 +58,13 @@ Workflow automatizado con ejecución programada que:
 
 | HTTP Request | Consulta el último release de n8n | GitHub API | Usa `User-Agent` configurado |
 
-| IF | Compara `tag\_name` vs versión instalada | n8n If | Define si se notifica |
+| IF | Compara `tag_name` vs versión instalada | n8n If | Define si se notifica |
 
 | Gmail | Envía alerta por correo | Gmail OAuth2 | Destino por variable de entorno |
 
 
 
-\### Flujo de Datos
+### Flujo de Datos
 
 
 
@@ -80,7 +80,7 @@ Schedule → Execute Command (n8n --version)
 
 
 
-\## Ejemplo de Notificación
+## Ejemplo de Notificación
 
 
 
@@ -90,11 +90,11 @@ Asunto: `Nueva versión n8n!`
 
 Cuerpo:
 
-`La versión de n8n estable se ha actualizado a <tag\_name>. Tenlo en cuenta para tus siguientes proyectos.`
+`La versión de n8n estable se ha actualizado a <tag_name>. Tenlo en cuenta para tus siguientes proyectos.`
 
 
 
-\## Impacto Medible
+## Impacto Medible
 
 
 
@@ -110,15 +110,15 @@ Cuerpo:
 
 
 
-\## 🔧 Requisitos Técnicos
+## 🔧 Requisitos Técnicos
 
 
 
-\### Credenciales Necesarias
+### Credenciales Necesarias
 
 
 
-1\. \*\*Gmail OAuth2\*\*
+1\. **Gmail OAuth2**
 
 \- Configurar en n8n: Settings → Credentials → Gmail OAuth2
 
@@ -126,27 +126,27 @@ Cuerpo:
 
 
 
-\### Variables de Entorno
+### Variables de Entorno
 
 
 
 Este workflow usa variables de entorno (no hardcodeadas en el JSON):
 
-\- `NOTIFY\_EMAIL`: email destino para avisos
+\- `NOTIFY_EMAIL`: email destino para avisos
 
-\- `APP\_USER\_AGENT`: User-Agent para la llamada a GitHub API
-
-
-
-\*\*Nota:\*\* se configuran en tu instancia n8n (Docker/system settings). No subas `.env` real al repositorio.
+\- `APP_USER_AGENT`: User-Agent para la llamada a GitHub API
 
 
 
-\## Instalación Paso a Paso
+**Nota:** se configuran en tu instancia n8n (Docker/system settings). No subas `.env` real al repositorio.
 
 
 
-\### 1. Importar el Workflow
+## Instalación Paso a Paso
+
+
+
+### 1. Importar el Workflow
 
 
 
@@ -158,7 +158,7 @@ Este workflow usa variables de entorno (no hardcodeadas en el JSON):
 
 
 
-\### 2. Configurar Credenciales
+### 2. Configurar Credenciales
 
 
 
@@ -170,19 +170,19 @@ Este workflow usa variables de entorno (no hardcodeadas en el JSON):
 
 
 
-\### 3. Configurar Variables de Entorno
+### 3. Configurar Variables de Entorno
 
 
 
 Configura en tu entorno n8n:
 
-\- `NOTIFY\_EMAIL`
+\- `NOTIFY_EMAIL`
 
-\- `APP\_USER\_AGENT`
+\- `APP_USER_AGENT`
 
 
 
-\### 4. Probar y Activar
+### 4. Probar y Activar
 
 
 
@@ -200,7 +200,7 @@ Configura en tu entorno n8n:
 
 
 
-\## Personalizaciones Comunes
+## Personalizaciones Comunes
 
 
 
@@ -214,19 +214,19 @@ Configura en tu entorno n8n:
 
 
 
-\## Seguridad
+## Seguridad
 
 
 
 \- El JSON del workflow está sanitizado (sin IDs sensibles ni datos privados).
 
-\- La dirección destino se parametriza por `NOTIFY\_EMAIL`.
+\- La dirección destino se parametriza por `NOTIFY_EMAIL`.
 
 \- Evita publicar tokens/IDs reales en `.env.example`.
 
 
 
-\## Contacto
+## Contacto
 
 
 
