@@ -37,7 +37,7 @@ Colección de flujos de automatización empresarial desarrollados con n8n para r
 |----------|-----------|-------------------|-------------|--------------|
 
 | [Pharmacy Inventory Monitor](./pharmacy-inventory-monitor) | Retail / Farmacia | Monitoreo automático de vencimientos y stock crítico | Google Sheets, Telegram, JavaScript | 80% reducción de pérdidas |
-
+| [Análisis de Actualizaciones n8n](./actualizaciones-n8n) | Administrativo | Monitoreo de versión más actualizada n8n | GMail, API n8n | 80% reducción de tiempo de búsqueda |
 | _[Próximamente]_ | - | - | - | - |
 
 
