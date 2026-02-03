@@ -240,7 +240,7 @@ text
 
 
 
-## 📊 Estructura de Datos
+## Estructura de Datos
 
 
 
@@ -252,7 +252,7 @@ Ver carpeta /database
 
 
 
-## 🛠️ Stack Tecnológico
+## Stack Tecnológico
 
 
 
@@ -276,7 +276,7 @@ Ver carpeta /database
 
 
 
-## 🚀 Instalación
+## Instalación
 
 
 
@@ -284,13 +284,13 @@ Ver carpeta /database
 
 
 
-- ✅ n8n instalado (self-hosted o cloud)
+- n8n instalado (self-hosted o cloud)
 
-- ✅ PostgreSQL 12 o superior
+- PostgreSQL 12 o superior
 
-- ✅ Cuenta SMTP (Zoho Mail, Gmail, SendGrid, etc.)
+- Cuenta SMTP (Zoho Mail, Gmail, SendGrid, etc.)
 
-- ✅ Dominio con SSL (recomendado para producción)
+- Dominio con SSL (recomendado para producción)
 
 
 
