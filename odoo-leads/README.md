@@ -1,4 +1,4 @@
-\# PostgreSQL → Odoo CRM Lead Sync
+# PostgreSQL → Odoo CRM Lead Sync
 
 
 
@@ -6,7 +6,7 @@ Workflow automatizado de n8n que sincroniza leads desde base de datos PostgreSQL
 
 
 
-\## Descripción
+## Descripción
 
 
 
@@ -14,21 +14,21 @@ Este workflow lee leads pendientes de sincronización desde una tabla PostgreSQL
 
 
 
-\- Sincronización automática cada 15 minutos
+- Sincronización automática cada 15 minutos
 
-\- Procesamiento en batches (50 leads max por ejecución)
+- Procesamiento en batches (50 leads max por ejecución)
 
-\- Clasificación automática de leads (hot/warm/cold → priority)
+- Clasificación automática de leads (hot/warm/cold → priority)
 
-\- Manejo de errores con auto-retry
+- Manejo de errores con auto-retry
 
-\- Logging completo de errores
+- Logging completo de errores
 
-\- Timezone: America/Guayaquil
+- Timezone: America/Guayaquil
 
 
 
-\## Arquitectura
+## Arquitectura
 
 
 
@@ -36,7 +36,7 @@ Schedule Trigger (15 min)
 
 ↓
 
-PostgreSQL SELECT (WHERE synced\_to\_odoo = false, LIMIT 50)
+PostgreSQL SELECT (WHERE synced_to_odoo = false, LIMIT 50)
 
 ↓
 
@@ -54,29 +54,29 @@ Odoo: Create Opportunity
 
 IF: ¿Creado exitosamente?
 
-├─ TRUE → PostgreSQL UPDATE (synced\_to\_odoo = true)
+├─ TRUE → PostgreSQL UPDATE (synced_to_odoo = true)
 
 └─ FALSE → Code: Log Error → Retry en 15 min
 
 
 
-\## Requisitos
+## Requisitos
 
 
 
-\- \*\*n8n\*\* v2.4.6+
+- **n8n** v2.4.6+
 
-\- \*\*PostgreSQL\*\* 12+ (recomendado: DigitalOcean Managed Database)
+- **PostgreSQL** 12+ (recomendado: DigitalOcean Managed Database)
 
-\- \*\*Odoo\*\* v14+ con API habilitada
-
-
-
-\## Instalación
+- **Odoo** v14+ con API habilitada
 
 
 
-\### 1. Crear tabla en PostgreSQL
+## Instalación
+
+
+
+### 1. Crear tabla en PostgreSQL
 
 
 
@@ -86,7 +86,7 @@ psql -h your-host -U doadmin -d defaultdb < schema.sql
 
 
 
-2\. Configurar credenciales en Odoo
+2. Configurar credenciales en Odoo
 
 
 
@@ -102,7 +102,7 @@ psql -h your-host -U doadmin -d defaultdb < schema.sql
 
 
 
-3\. Importar workflow en n8n
+3. Importar workflow en n8n
 
 
 
@@ -162,11 +162,11 @@ Odoo API Connection:
 
 
 
-&nbsp;   Database: nombre\_bd\_odoo
+&nbsp;   Database: nombre_bd_odoo
 
 
 
-4\. Activar workflow
+4. Activar workflow
 
 
 
@@ -174,7 +174,7 @@ Toggle Active en n8n
 
 
 
-\## Configuración
+## Configuración
 
 
 
@@ -220,21 +220,21 @@ PostgreSQL	Odoo CRM
 
 nombre + empresa	name
 
-nombre	contact\_name
+nombre	contact_name
 
-email	email\_from
+email	email_from
 
 telefono	phone
 
-empresa	partner\_name
+empresa	partner_name
 
 mensaje + metadata	description
 
-lead\_quality	priority (hot=3, warm=2, cold=1)
+lead_quality	priority (hot=3, warm=2, cold=1)
 
 
 
-\## Notas
+## Notas
 
 
 
@@ -250,7 +250,7 @@ lead\_quality	priority (hot=3, warm=2, cold=1)
 
 
 
-&nbsp;   El campo synced\_to\_odoo controla qué leads se procesan
+&nbsp;   El campo synced_to_odoo controla qué leads se procesan
 
 
 
@@ -262,13 +262,13 @@ Workflows Relacionados
 
 
 
-\## Autor
+## Autor
 
 
 
 Robinson Barrazueta
 
-Data Engineer \& Business Process Automation Specialist
+Data Engineer & Business Process Automation Specialist
 
 
 
