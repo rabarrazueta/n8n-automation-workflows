@@ -1,0 +1,485 @@
+{
+  "name": "formulario html",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "processia-contact-form",
+        "authentication": "headerAuth",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "https://processia.online",
+          "ignoreBots": true
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        432,
+        0
+      ],
+      "id": "f89ceb52-1feb-42ee-8ad2-78d3bbd7044e",
+      "name": "Entrada de datos Formulario",
+      "webhookId": "WEBHOOK_ID_PLACEHOLDER",
+      "credentials": {
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "4a78a4ac-f248-4018-a94d-ed39d339086f",
+              "leftValue": "={{$json.headers['x-processia-key']}}",
+              "rightValue": "YOUR_SECRET_TOKEN_HERE",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        624,
+        0
+      ],
+      "id": "7cbc8adc-4761-49e0-8d2a-8c31b98c1ec0",
+      "name": "If: comprobación de secure key"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\nfor (const item of items) {\n  // Los datos están dentro de body\n  const body = item.json.body || {};\n  \n  // Generar leadId con el email real\n  const email = body.email || 'unknown';\n  item.json.leadId = email + '-' + Date.now();\n  \n  // Calcular lead score\n  const telefono = body.telefono || '';\n  const empresa = body.empresa || '';\n  const mensaje = body.mensaje || '';\n  \n  const hasPhone = telefono.length > 6;\n  const hasCompany = empresa.trim().length > 0;\n  const longMessage = mensaje.length > 100;\n  \n  const leadScore = \n    (hasPhone ? 30 : 0) + \n    (hasCompany ? 40 : 0) + \n    (longMessage ? 30 : 0);\n  \n  const leadQuality = leadScore >= 70 ? 'hot' : \n                      leadScore >= 40 ? 'warm' : 'cold';\n  \n  item.json.leadScore = leadScore;\n  item.json.leadQuality = leadQuality;\n  item.json.source = 'website_form';\n  item.json.receivedAt = new Date().toISOString();\n}\n\nreturn items;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        832,
+        -64
+      ],
+      "id": "bf202af8-b77a-4876-973c-ef1e540a6c7c",
+      "name": "JS: Manejo de datos para carga en DB"
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "processia_leads",
+          "mode": "list",
+          "cachedResultName": "processia_leads"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "synced_to_odoo": false,
+            "lead_score": "={{$json.leadScore}}",
+            "lead_id": "={{$json.leadId}}",
+            "nombre": "={{ $json.body.nombre }}",
+            "email": "={{$json.body.email}}",
+            "empresa": "={{$json.body.empresa}}",
+            "telefono": "={{$json.body.telefono}}",
+            "mensaje": "={{$json.body.mensaje}}",
+            "lead_quality": "={{$json.leadQuality}}",
+            "source": "={{$json.source}}",
+            "metadata": "={{JSON.stringify($json.body.metadata)}}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "lead_id",
+              "displayName": "lead_id",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "nombre",
+              "displayName": "nombre",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "empresa",
+              "displayName": "empresa",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "telefono",
+              "displayName": "telefono",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "mensaje",
+              "displayName": "mensaje",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "lead_score",
+              "displayName": "lead_score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "lead_quality",
+              "displayName": "lead_quality",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "source",
+              "displayName": "source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "metadata",
+              "displayName": "metadata",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "object",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "updated_at",
+              "displayName": "updated_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "synced_to_odoo",
+              "displayName": "synced_to_odoo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1040,
+        -64
+      ],
+      "id": "411406e2-76a5-4750-bf12-e12cd238568b",
+      "name": "Carga de datos en DB Postgres",
+      "credentials": {
+  	"postgres": {
+    	"id": "YOUR_POSTGRES_CREDENTIAL_ID",
+    	"name": "PostgreSQL Database"
+  	}
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"success\": true,\n  \"message\": \"Formulario recibido correctamente\",\n  \"leadId\": \"{{$json.leadId}}\",\n  \"leadQuality\": \"{{$json.leadQuality}}\"\n}\n",
+        "options": {
+          "responseCode": 200,
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "https://processia.online"
+              },
+              {
+                "name": "Access-Control-Allow-Methods",
+                "value": "POST, OPTIONS"
+              },
+              {
+                "name": "Access-Control-Allow-Headers",
+                "value": "Content-Type, X-Processia-Key"
+              },
+              {
+                "name": "Access-Control-Max-Age",
+                "value": "86400"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1536,
+        -64
+      ],
+      "id": "d016af45-45b5-441f-baed-6d8ccdc6454b",
+      "name": "Cierre de Conexión"
+    },
+    {
+      "parameters": {
+        "fromEmail": "contacto@processia.online",
+        "toEmail": "contacto@processia.online",
+        "subject": "=IMPORTANTE: 🔔 Nuevo Lead {{$json.lead_quality.toUpperCase()}} - {{$json.empresa}}",
+        "emailFormat": "text",
+        "text": "=¡Nuevo contacto desde processia.online!\n\n👤 DATOS DEL LEAD\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nNombre:    {{$json.nombre}}\nEmail:     {{$json.email}}\nEmpresa:   {{$json.empresa}}\nTeléfono:  {{$json.telefono}}\n\n💬 MENSAJE\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n{{$json.mensaje}}\n\n📊 ANÁLISIS AUTOMÁTICO\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nScore:     {{$json.lead_score}}/100\nCalidad:   {{$json.lead_quality.toUpperCase()}}\nFuente:    {{$json.source}}\n\n🌍 METADATA\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nNavegador: {{$json.metadata.userAgent}}\nIdioma:    {{$json.metadata.language}}\nFecha:     {{DateTime.fromISO($json.metadata.timestamp).toFormat('dd/MM/yyyy HH:mm')}}\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nID: {{$json.lead_id}}\n",
+        "options": {
+          "appendAttribution": true
+        }
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1200,
+        -192
+      ],
+      "id": "6c2538fb-b784-43a2-961d-c298036df686",
+      "name": "Email con Hot Lead",
+      "webhookId": "5a2a2c70-4f26-476c-ba8f-1f7067c41e9c",
+      "credentials": {
+        "smtp": {
+          "id": "YOUR_SMTP_CREDENTIAL_ID",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "contacto@processia.online",
+        "toEmail": "={{ $json.email }}",
+        "subject": "¡Recibimos tu mensaje! - Processia Ops",
+        "html": "=<!DOCTYPE html>\n<html>\n<head>\n  <meta charset=\"UTF-8\">\n  <style>\n    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }\n    .container { max-width: 600px; margin: 0 auto; }\n    .header { background: linear-gradient(135deg, #1E3A5F 0%, #2C5282 100%); padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }\n    .header h1 { color: #D4AF37; margin: 0; font-size: 24px; }\n    .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }\n    .box { background: white; padding: 20px; border-left: 4px solid #D4AF37; margin: 20px 0; }\n    .footer { text-align: center; padding: 20px; font-size: 12px; color: #999; }\n    .button { background: #D4AF37; color: #1E3A5F; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block; margin: 20px 0; font-weight: bold; }\n    ul { padding-left: 20px; }\n    li { margin: 10px 0; }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <div class=\"header\">\n      <h1>¡Gracias por contactarnos!</h1>\n    </div>\n    \n    <div class=\"content\">\n      <p>Hola <strong>{{ $json.nombre }}</strong>,</p>\n      \n      <p>Hemos recibido tu mensaje y un miembro de nuestro equipo lo revisará pronto.</p>\n      \n      <div class=\"box\">\n        <p style=\"margin: 0;\"><strong>Tu mensaje:</strong></p>\n        <p style=\"margin: 10px 0 0 0; color: #666;\">{{$json.mensaje}}</p>\n      </div>\n      \n      <p><strong>¿Qué sigue?</strong></p>\n      <ul>\n        <li>Te responderemos en un máximo de <strong>24 horas hábiles</strong></li>\n        <li>Si tu consulta es urgente, contáctanos directamente</li>\n        <li>Mientras tanto, explora nuestros <a href=\"https://processia.online#servicios\" style=\"color: #1E3A5F;\">servicios de automatización</a></li>\n      </ul>\n      \n      <center>\n        <a href=\"https://processia.online#servicios\" class=\"button\">Ver Nuestros Servicios</a>\n      </center>\n      \n      <p>Saludos,<br>\n      <strong>Equipo Processia Ops</strong><br>\n      Automatización que impulsa tu negocio 🚀</p>\n    </div>\n    \n    <div class=\"footer\">\n      <p>Processia Ops | Ecuador<br>\n      <a href=\"https://processia.online\" style=\"color: #D4AF37; text-decoration: none;\">processia.online</a></p>\n    </div>\n  </div>\n</body>\n</html>\n",
+        "options": {
+          "appendAttribution": true
+        }
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1200,
+        48
+      ],
+      "id": "15d452df-6819-4c0a-a7ec-88aaa44199fa",
+      "name": "Email confirmación a Cliente",
+      "webhookId": "5a2a2c70-4f26-476c-ba8f-1f7067c41e9c",
+      "credentials": {
+        "smtp": {
+          "id": "YOUR_SMTP_CREDENTIAL_ID",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1376,
+        -64
+      ],
+      "id": "9bcf63c9-3230-4c75-b2a8-7a3fa477da55",
+      "name": "Unión de nodos"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\"success\": false, \"message\": \"Unauthorized\"}",
+        "options": {
+          "responseCode": 401
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        832,
+        96
+      ],
+      "id": "5fab0b6a-e63a-46fc-8fed-a0d491c0005f",
+      "name": "Cierra conexión si la key es incorrecta"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Entrada de datos Formulario": {
+      "main": [
+        [
+          {
+            "node": "If: comprobación de secure key",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If: comprobación de secure key": {
+      "main": [
+        [
+          {
+            "node": "JS: Manejo de datos para carga en DB",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Cierra conexión si la key es incorrecta",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "JS: Manejo de datos para carga en DB": {
+      "main": [
+        [
+          {
+            "node": "Carga de datos en DB Postgres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Carga de datos en DB Postgres": {
+      "main": [
+        [
+          {
+            "node": "Email con Hot Lead",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Email confirmación a Cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cierre de Conexión": {
+      "main": [
+        []
+      ]
+    },
+    "Email con Hot Lead": {
+      "main": [
+        [
+          {
+            "node": "Unión de nodos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email confirmación a Cliente": {
+      "main": [
+        [
+          {
+            "node": "Unión de nodos",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Unión de nodos": {
+      "main": [
+        [
+          {
+            "node": "Cierre de Conexión",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "timezone": "America/Guayaquil",
+    "callerPolicy": "workflowsFromSameOwner",
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "YOUR_N8N_INSTANCE_ID"
+  },
+  "tags": []
+}
