@@ -1,4 +1,4 @@
-\# 🚀 Sistema de Captura Inteligente de Leads con n8n
+# 🚀 Sistema de Captura Inteligente de Leads con n8n
 
 
 
@@ -6,9 +6,9 @@ Workflow automatizado para capturar, clasificar y gestionar leads desde formular
 
 
 
-!\[n8n](https://img.shields.io/badge/n8n-2.4.6+-EA4B71?style=flat-square\&logo=n8n)
+![n8n](https://img.shields.io/badge/n8n-2.4.6+-EA4B71?style=flat-square&logo=n8n)
 
-!\[PostgreSQL](https://img.shields.io/badge/PostgreSQL-12+-336791?style=flat-square\&logo=postgresql\&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-12+-336791?style=flat-square&logo=postgresql&logoColor=white)
 
 
 
@@ -16,7 +16,7 @@ Workflow automatizado para capturar, clasificar y gestionar leads desde formular
 
 
 
-\## 📋 Descripción
+## 📋 Descripción
 
 
 
@@ -24,59 +24,59 @@ Este workflow de n8n automatiza completamente el proceso de captura de leads des
 
 
 
-\### ¿Qué Hace?
+### ¿Qué Hace?
 
 
 
-1\. \*\*Recibe\*\* formularios web vía webhook POST con validación de seguridad
+1. **Recibe** formularios web vía webhook POST con validación de seguridad
 
-2\. \*\*Clasifica\*\* automáticamente cada lead según calidad (hot/warm/cold)
+2. **Clasifica** automáticamente cada lead según calidad (hot/warm/cold)
 
-3\. \*\*Calcula\*\* un lead score de 0-100 puntos basado en datos proporcionados
+3. **Calcula** un lead score de 0-100 puntos basado en datos proporcionados
 
-4\. \*\*Almacena\*\* en PostgreSQL con metadata completa (navegador, idioma, timestamp)
+4. **Almacena** en PostgreSQL con metadata completa (navegador, idioma, timestamp)
 
-5\. \*\*Notifica\*\* vía email a tu equipo con análisis automático del lead
+5. **Notifica** vía email a tu equipo con análisis automático del lead
 
-6\. \*\*Confirma\*\* al cliente con email profesional de respuesta automática
+6. **Confirma** al cliente con email profesional de respuesta automática
 
-7\. \*\*Responde\*\* al navegador en <3 segundos para mejor UX
-
-
-
-\### Problema que Resuelve
+7. **Responde** al navegador en <3 segundos para mejor UX
 
 
 
-\*\*Antes:\*\*
-
-\- Leads perdidos en emails sin leer
-
-\- Respuestas lentas a contactos importantes
-
-\- Sin priorización de oportunidades
-
-\- Datos dispersos sin seguimiento
-
-\- Página web estática sin uso real
+### Problema que Resuelve
 
 
 
-\*\*Después:\*\*
+**Antes:**
 
-\- 100% de leads capturados y clasificados
+- Leads perdidos en emails sin leer
 
-\- Notificaciones instantáneas al equipo
+- Respuestas lentas a contactos importantes
 
-\- Priorización automática por scoring
+- Sin priorización de oportunidades
 
-\- Base de datos centralizada con metadata
+- Datos dispersos sin seguimiento
 
-\- Confirmación inmediata al cliente
+- Página web estática sin uso real
 
-\- Preparado para sincronización con CRM (Odoo)
 
-\- Página web básica convertida en una herramienta de ingresos reales.
+
+**Después:**
+
+- 100% de leads capturados y clasificados
+
+- Notificaciones instantáneas al equipo
+
+- Priorización automática por scoring
+
+- Base de datos centralizada con metadata
+
+- Confirmación inmediata al cliente
+
+- Preparado para sincronización con CRM (Odoo)
+
+- Página web básica convertida en una herramienta de ingresos reales.
 
 
 
@@ -84,7 +84,7 @@ Este workflow de n8n automatiza completamente el proceso de captura de leads des
 
 
 
-\## 🎯 Lead Scoring Automático
+## 🎯 Lead Scoring Automático
 
 
 
@@ -96,19 +96,19 @@ Sistema de puntuación inteligente basado en calidad de datos:
 
 |----------|--------|--------|
 
-| 📞 \*\*Teléfono\*\* | +30 | Longitud > 6 caracteres |
+| 📞 **Teléfono** | +30 | Longitud > 6 caracteres |
 
-| 🏢 \*\*Empresa\*\* | +40 | Campo no vacío |
+| 🏢 **Empresa** | +40 | Campo no vacío |
 
-| 💬 \*\*Mensaje detallado\*\* | +30 | Longitud > 100 caracteres |
-
-
-
-\### Clasificación por Calidad
+| 💬 **Mensaje detallado** | +30 | Longitud > 100 caracteres |
 
 
 
-\- \*\*HOT\*\* (70-100 pts): Lead de alta prioridad
+### Clasificación por Calidad
+
+
+
+- **HOT** (70-100 pts): Lead de alta prioridad
 
 &nbsp; - Tiene todos los datos completos
 
@@ -118,7 +118,7 @@ Sistema de puntuación inteligente basado en calidad de datos:
 
 
 
-\- \*\*WARM\*\* (40-69 pts): Lead de prioridad media
+- **WARM** (40-69 pts): Lead de prioridad media
 
 &nbsp; - Datos parcialmente completos
 
@@ -128,7 +128,7 @@ Sistema de puntuación inteligente basado en calidad de datos:
 
 
 
-\- \*\*COLD\*\* (<40 pts): Lead de baja prioridad
+- **COLD** (<40 pts): Lead de baja prioridad
 
 &nbsp; - Información mínima
 
@@ -142,7 +142,7 @@ Sistema de puntuación inteligente basado en calidad de datos:
 
 
 
-\## Arquitectura del Sistema
+## Arquitectura del Sistema
 
 
 
@@ -160,7 +160,7 @@ Sistema de puntuación inteligente basado en calidad de datos:
 
 │ POST /webhook/processia-contact-form
 
-│ Header: X-Processia-Key: \[token]
+│ Header: X-Processia-Key: [token]
 
 │ Body: JSON con datos del formulario
 
@@ -188,7 +188,7 @@ Sistema de puntuación inteligente basado en calidad de datos:
 
 │ │ └─ Calcula score y calidad │ │
 
-│ │ └─ Genera lead\_id único │ │
+│ │ └─ Genera lead_id único │ │
 
 │ │ │ │
 
@@ -232,7 +232,7 @@ text
 
 
 
-\*\*Tiempo de respuesta promedio:\*\* 3-4 segundos
+**Tiempo de respuesta promedio:** 3-4 segundos
 
 
 
@@ -240,11 +240,11 @@ text
 
 
 
-\## 📊 Estructura de Datos
+## 📊 Estructura de Datos
 
 
 
-\### Tabla: `processia\_leads`
+### Tabla: `processia_leads`
 
 
 
@@ -252,7 +252,7 @@ Ver carpeta /database
 
 
 
-\## 🛠️ Stack Tecnológico
+## 🛠️ Stack Tecnológico
 
 
 
@@ -260,15 +260,15 @@ Ver carpeta /database
 
 |------------|------------|---------|-----|
 
-| \*\*Workflow Engine\*\* | n8n | 2.4.6+ | Automatización principal |
+| **Workflow Engine** | n8n | 2.4.6+ | Automatización principal |
 
-| \*\*Base de Datos\*\* | PostgreSQL | 12+ | Almacenamiento persistente |
+| **Base de Datos** | PostgreSQL | 12+ | Almacenamiento persistente |
 
-| \*\*SMTP\*\* | Zoho Mail | - | Envío de emails |
+| **SMTP** | Zoho Mail | - | Envío de emails |
 
-| \*\*Hosting\*\* | DigitalOcean | - | Servidor n8n + PostgreSQL |
+| **Hosting** | DigitalOcean | - | Servidor n8n + PostgreSQL |
 
-| \*\*Frontend\*\* | HTML/CSS/JS | - | \[Ver repo →](https://github.com/rabarrazueta/rabarrazueta.github.io) |
+| **Frontend** | HTML/CSS/JS | - | [Ver repo →](https://github.com/rabarrazueta/rabarrazueta.github.io) |
 
 
 
@@ -276,45 +276,45 @@ Ver carpeta /database
 
 
 
-\## 🚀 Instalación
+## 🚀 Instalación
 
 
 
-\### Requisitos Previos
+### Requisitos Previos
 
 
 
-\- ✅ n8n instalado (self-hosted o cloud)
+- ✅ n8n instalado (self-hosted o cloud)
 
-\- ✅ PostgreSQL 12 o superior
+- ✅ PostgreSQL 12 o superior
 
-\- ✅ Cuenta SMTP (Zoho Mail, Gmail, SendGrid, etc.)
+- ✅ Cuenta SMTP (Zoho Mail, Gmail, SendGrid, etc.)
 
-\- ✅ Dominio con SSL (recomendado para producción)
+- ✅ Dominio con SSL (recomendado para producción)
 
 
 
-\### Paso 1: Configurar Base de Datos
+### Paso 1: Configurar Base de Datos
 
 
 
 ```bash
 
-\# Conectar a PostgreSQL
+# Conectar a PostgreSQL
 
-psql -U postgres -d tu\_database
-
-
-
-\# Ejecutar schema
-
-\\i database/schema.sql
+psql -U postgres -d tu_database
 
 
 
-\# Verificar tabla creada
+# Ejecutar schema
 
-\\dt processia\_leads
+i database/schema.sql
+
+
+
+# Verificar tabla creada
+
+dt processia_leads
 
 
 
@@ -322,7 +322,7 @@ Resultado esperado:
 
 
 
-&nbsp;   Tabla processia\_leads creada
+&nbsp;   Tabla processia_leads creada
 
 
 
@@ -330,7 +330,7 @@ Resultado esperado:
 
 
 
-&nbsp;   Trigger update\_updated\_at activo
+&nbsp;   Trigger update_updated_at activo
 
 
 
@@ -340,13 +340,13 @@ Paso 2: Configurar Variables de Entorno
 
 bash
 
-\# Copiar template
+# Copiar template
 
 cp .env.example .env
 
 
 
-\# Editar con tus valores
+# Editar con tus valores
 
 nano .env
 
@@ -358,17 +358,17 @@ Variables críticas a configurar:
 
 bash
 
-WEBHOOK\_SECRET\_TOKEN=     # Generar con: openssl rand -hex 32
+WEBHOOK_SECRET_TOKEN=     # Generar con: openssl rand -hex 32
 
-DB\_HOST=                  # Host de tu PostgreSQL
+DB_HOST=                  # Host de tu PostgreSQL
 
-DB\_PASSWORD=              # Password de PostgreSQL
+DB_PASSWORD=              # Password de PostgreSQL
 
-SMTP\_USER=                # Tu email corporativo
+SMTP_USER=                # Tu email corporativo
 
-SMTP\_PASSWORD=            # Password SMTP o App Password
+SMTP_PASSWORD=            # Password SMTP o App Password
 
-ALLOWED\_ORIGIN=           # Tu dominio web
+ALLOWED_ORIGIN=           # Tu dominio web
 
 
 
@@ -484,7 +484,7 @@ Email 1: Notificación Interna (Equipo)
 
 
 
-Subject: IMPORTANTE: 🔔 Nuevo Lead \[HOT/WARM/COLD] - \[Empresa]
+Subject: IMPORTANTE: 🔔 Nuevo Lead [HOT/WARM/COLD] - [Empresa]
 
 
 
@@ -612,7 +612,7 @@ Servicios
 
 
 
-&nbsp;   🔌 Data Engineering \& Pipelines ETL
+&nbsp;   🔌 Data Engineering & Pipelines ETL
 
 
 
@@ -630,7 +630,7 @@ Contacto
 
 Robinson Barrazueta
 
-Data Engineer \& Business Process Automation Specialist
+Data Engineer & Business Process Automation Specialist
 
 
 
