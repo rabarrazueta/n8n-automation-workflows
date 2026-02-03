@@ -16,7 +16,7 @@ Workflow automatizado para capturar, clasificar y gestionar leads desde formular
 
 
 
-## 📋 Descripción
+## Descripción
 
 
 
@@ -84,7 +84,7 @@ Este workflow de n8n automatiza completamente el proceso de captura de leads des
 
 
 
-## 🎯 Lead Scoring Automático
+## Lead Scoring Automático
 
 
 
