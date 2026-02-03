@@ -1,4 +1,4 @@
-# 🚀 Sistema de Captura Inteligente de Leads con n8n
+# Sistema de Captura Inteligente de Leads con n8n
 
 
 
