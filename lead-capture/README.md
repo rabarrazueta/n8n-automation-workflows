@@ -96,11 +96,11 @@ Sistema de puntuación inteligente basado en calidad de datos:
 
 |----------|--------|--------|
 
-| 📞 **Teléfono** | +30 | Longitud > 6 caracteres |
+| **Teléfono** | +30 | Longitud > 6 caracteres |
 
-| 🏢 **Empresa** | +40 | Campo no vacío |
+| **Empresa** | +40 | Campo no vacío |
 
-| 💬 **Mensaje detallado** | +30 | Longitud > 100 caracteres |
+| **Mensaje detallado** | +30 | Longitud > 100 caracteres |
 
 
 
@@ -298,7 +298,7 @@ Ver carpeta /database
 
 
 
-```bash
+`bash
 
 # Conectar a PostgreSQL
 
