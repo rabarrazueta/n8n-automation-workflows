@@ -1,4 +1,4 @@
-\# AI Chatbot con n8n + Groq + PostgreSQL
+# AI Chatbot con n8n + Groq + PostgreSQL
 
 
 
@@ -6,27 +6,27 @@ Chatbot conversacional embebible en sitios web, construido con n8n, Groq (Llama 
 
 
 
-\## Características
+## Características
 
 
 
-\- Conversación natural con LLM (Groq - Llama 3.3 70B). OJO, TIENEN UN PLAN GRATUITO PARA WEBS CON POCO TRÁFICO, APROVÉCHALO!
+- Conversación natural con LLM (Groq - Llama 3.3 70B). OJO, TIENEN UN PLAN GRATUITO PARA WEBS CON POCO TRÁFICO, APROVÉCHALO!
 
-\- Memoria persistente de conversaciones (PostgreSQL). OJO, para este flujo se ha trabajado con el servicio serverless de Neon (DBaaS), con su alternativa gratuita que, en mi opinión, es muy interesante a tomar en cuenta para proyectos de baja escala. 
+- Memoria persistente de conversaciones (PostgreSQL). OJO, para este flujo se ha trabajado con el servicio serverless de Neon (DBaaS), con su alternativa gratuita que, en mi opinión, es muy interesante a tomar en cuenta para proyectos de baja escala. 
 
-\- System prompt personalizable con información del negocio
+- System prompt personalizable con información del negocio
 
-\- Webhook público para integración web
+- Webhook público para integración web
 
-\- Streaming de respuestas en tiempo real
+- Streaming de respuestas en tiempo real
 
-\- Context window configurable
+- Context window configurable
 
-\- Widget embebible en cualquier sitio web
+- Widget embebible en cualquier sitio web
 
 
 
-\## Arquitectura
+## Arquitectura
 
 
 
@@ -54,45 +54,45 @@ Respuesta al usuario (Streaming)
 
 
 
-\## Requisitos
+## Requisitos
 
 
 
-\- \*\*n8n\*\* v2.4.6+
+- **n8n** v2.4.6+
 
-\- \*\*PostgreSQL\*\* 12+ (recomendado: Neon.tech para serverless)
+- **PostgreSQL** 12+ (recomendado: Neon.tech para serverless)
 
-\- \*\*Groq API Key\*\* (obtener en \[console.groq.com](https://console.groq.com)), aunque se puede usar OpenRouter o incluso Gemini/OpenAI de tener tokens disponibles en su cuenta. 
+- **Groq API Key** (obtener en [console.groq.com](https://console.groq.com)), aunque se puede usar OpenRouter o incluso Gemini/OpenAI de tener tokens disponibles en su cuenta. 
 
-\- \*\*Dominio propio\*\* con SSL (para webhook público)
-
-
-
-\## Instalación
+- **Dominio propio** con SSL (para webhook público)
 
 
 
-\### 1. Configurar PostgreSQL
+## Instalación
 
 
 
-\*\*Opción A: Neon.tech (Recomendado - Gratis)\*\*
+### 1. Configurar PostgreSQL
 
 
 
-1\. Crear cuenta en \[neon.tech](https://neon.tech)
-
-2\. Crear nuevo proyecto "chatbot-memory"
-
-3\. Copiar connection string
+**Opción A: Neon.tech (Recomendado - Gratis)**
 
 
 
-\*\*Opción B: PostgreSQL Local/VPS\*\*
+1. Crear cuenta en [neon.tech](https://neon.tech)
+
+2. Crear nuevo proyecto "chatbot-memory"
+
+3. Copiar connection string
 
 
 
-2\. Configurar Groq API
+**Opción B: PostgreSQL Local/VPS**
+
+
+
+2. Configurar Groq API
 
 
 
@@ -108,7 +108,7 @@ Respuesta al usuario (Streaming)
 
 
 
-3\. Importar workflow en n8n
+3. Importar workflow en n8n
 
 
 
@@ -144,15 +144,15 @@ PostgreSQL Memory:
 
 
 
-&nbsp;   Database: chatbot\_memory
+&nbsp;   Database: chatbot_memory
 
 
 
-&nbsp;   User: tu\_usuario
+&nbsp;   User: tu_usuario
 
 
 
-&nbsp;   Password: tu\_contraseña
+&nbsp;   Password: tu_contraseña
 
 
 
@@ -160,7 +160,7 @@ PostgreSQL Memory:
 
 
 
-4\. Personalizar System Prompt
+4. Personalizar System Prompt
 
 
 
@@ -172,15 +172,15 @@ PostgreSQL Memory:
 
 
 
-&nbsp;       {{COMPANY\_NAME}} → Nombre de tu empresa
+&nbsp;       {{COMPANY_NAME}} → Nombre de tu empresa
 
 
 
-&nbsp;       {{CONTACT\_EMAIL}} → Tu email
+&nbsp;       {{CONTACT_EMAIL}} → Tu email
 
 
 
-&nbsp;       {{COMPANY\_WEBSITE}} → Tu sitio web
+&nbsp;       {{COMPANY_WEBSITE}} → Tu sitio web
 
 
 
@@ -196,7 +196,7 @@ PostgreSQL Memory:
 
 
 
-5\. Activar webhook
+5. Activar webhook
 
 
 
@@ -212,7 +212,7 @@ PostgreSQL Memory:
 
 
 
-6\. Embeber en tu sitio web
+6. Embeber en tu sitio web
 
 
 
@@ -220,11 +220,11 @@ HTML básico: código disponible en https://www.npmjs.com/package/@n8n/chat
 
 
 
-\# Configuración
+# Configuración
 
 
 
-\## Ajustar temperatura del LLM
+## Ajustar temperatura del LLM
 
 
 
@@ -244,7 +244,7 @@ En el nodo "Groq: Modelo Llama 3.70":
 
 
 
-\## Ajustar memoria de contexto
+## Ajustar memoria de contexto
 
 
 
@@ -264,7 +264,7 @@ En el nodo "Conexión con DB Postgres Neon":
 
 
 
-\## Cambiar modelo de LLM
+## Cambiar modelo de LLM
 
 
 
@@ -284,11 +284,11 @@ Modelos disponibles en Groq:
 
 
 
-\# Costos Estimados
+# Costos Estimados
 
 
 
-\## Groq (Gratis hasta 6000 requests/día)
+## Groq (Gratis hasta 6000 requests/día)
 
 
 
@@ -304,7 +304,7 @@ Modelos disponibles en Groq:
 
 
 
-\## PostgreSQL (Neon.tech)
+## PostgreSQL (Neon.tech)
 
 
 
@@ -320,7 +320,7 @@ Total estimado: $0 - $5 USD/mes (tráfico bajo-medio)
 
 
 
-\# Gestión de Base de Datos
+# Gestión de Base de Datos
 
 
 
@@ -328,7 +328,7 @@ Revisar documento de schema.sql
 
 
 
-\# Troubleshooting
+# Troubleshooting
 
 
 
@@ -336,7 +336,7 @@ El nodo set (Definición de variables) es fundamental ya que sin esta definició
 
 
 
-\# Contacto
+# Contacto
 
 
 
