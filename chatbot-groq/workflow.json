@@ -1,0 +1,162 @@
+{
+  "name": "CHATBOT",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "mode": "webhook",
+        "options": {
+          "allowedOrigins": "{{ALLOWED_ORIGINS}}",
+          "responseMode": "streaming"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -640,
+        0
+      ],
+      "id": "9fd18305-c95a-4941-ae66-3f60e0f89e22",
+      "name": "Mensaje de usuario",
+      "webhookId": ""
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1ac77e50-0fbe-4953-9dd8-b23375cfe553",
+              "name": "userMessage",
+              "value": "={{ $json.chatInput }}",
+              "type": "string"
+            },
+            {
+              "id": "dbba431f-9bae-44d5-9ebe-fd2bc96f764d",
+              "name": "",
+              "value": "={{ $json.sessionId }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -464,
+        0
+      ],
+      "id": "442d10c2-e19a-498c-8fb5-3eca1e9353c0",
+      "name": "Definición de variables"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.userMessage }}",
+        "options": {
+          "systemMessage": "{{SYSTEM_PROMPT}}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -304,
+        0
+      ],
+      "id": "8237f9c6-d610-47a5-ac71-28ef4d4bdf32",
+      "name": "Agente IA"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.3-70b-versatile",
+        "options": {
+          "temperature": 0.5
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        -416,
+        208
+      ],
+      "id": "b5a15c9d-9757-43a4-a490-17119860b2c2",
+      "name": "Groq: Modelo Llama 3.70",
+      "credentials": {
+        "groqApi": {
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        -256,
+        208
+      ],
+      "id": "a19a6430-666e-4a4c-980d-432ec62e1344",
+      "name": "Conexión con DB Postgres Neon",
+      "credentials": {
+        "postgres": {
+          "name": "Postgres Neon"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Mensaje de usuario": {
+      "main": [
+        [
+          {
+            "node": "Definición de variables",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Definición de variables": {
+      "main": [
+        [
+          {
+            "node": "Agente IA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq: Modelo Llama 3.70": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Agente IA",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Conexión con DB Postgres Neon": {
+      "ai_memory": [
+        [
+          {
+            "node": "Agente IA",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Guayaquil",
+  },
+  "tags": []
+}
