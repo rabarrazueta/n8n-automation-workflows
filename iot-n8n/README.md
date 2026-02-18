@@ -1,28 +1,28 @@
-\# IoT con n8n
+# IoT con n8n
 
 
 
-Demostración práctica del uso de \*\*n8n como servidor IoT\*\*, reemplazando infraestructura tradicional (MQTT brokers, servidores dedicados) con workflows de automatización. Este proyecto muestra que n8n no es solo una herramienta de integración de apps, sino que puede actuar como backend completo para sistemas físicos conectados.
+Demostración práctica del uso de **n8n como servidor IoT**, reemplazando infraestructura tradicional (MQTT brokers, servidores dedicados) con workflows de automatización. Este proyecto muestra que n8n no es solo una herramienta de integración de apps, sino que puede actuar como backend completo para sistemas físicos conectados.
 
 
 
-\## Concepto
+## Concepto
 
 
 
 En un sistema IoT tradicional necesitas:
 
-\- Un broker MQTT (Mosquitto, HiveMQ)
+- Un broker MQTT (Mosquitto, HiveMQ)
 
-\- Un servidor backend (Node.js, Flask)
+- Un servidor backend (Node.js, Flask)
 
-\- Una base de datos para estado
+- Una base de datos para estado
 
-\- Un frontend para control
+- Un frontend para control
 
 
 
-\*\*Con n8n, todo eso se reemplaza con un solo workflow.\*\*
+**Con n8n, todo eso se reemplaza con un solo workflow.**
 
 
 
@@ -30,11 +30,11 @@ Este proyecto usa Google Sheets como memoria de estado (simulando una base de da
 
 
 
-\## Arquitectura del Flujo
+## Arquitectura del Flujo
 
 
 
-!\[Diagrama del workflow](workflow-diagram.png)
+![Diagrama del workflow](workflow-diagram.png)
 
 
 
@@ -50,21 +50,21 @@ El sistema tiene 4 canales de comunicación independientes, cada uno manejado po
 
 │                                                         │
 
-│  \[GET /iot-website]  →  Sirve la UI de control al QR   │
+│  [GET /iot-website]  →  Sirve la UI de control al QR   │
 
 │                                                         │
 
-│  \[POST /recibir-accion] → Recibe comando del botón     │
+│  [POST /recibir-accion] → Recibe comando del botón     │
 
 │                        → Escribe estado en Sheets      │
 
 │                                                         │
 
-│  \[GET /panel-profesor]  → Sirve el dashboard de monit. │
+│  [GET /panel-profesor]  → Sirve el dashboard de monit. │
 
 │                                                         │
 
-│  \[GET /consultar-estado]→ Lee estado en Sheets         │
+│  [GET /consultar-estado]→ Lee estado en Sheets         │
 
 │                        → Retorna JSON al dashboard     │
 
@@ -82,57 +82,57 @@ El sistema tiene 4 canales de comunicación independientes, cada uno manejado po
 
 
 
-\*\*Google Sheets actúa como base de datos de estado:\*\*
+**Google Sheets actúa como base de datos de estado:**
 
-\- Columna `ID`: identificador de la variable (`control`)
+- Columna `ID`: identificador de la variable (`control`)
 
-\- Columna `Valor`: estado actual (`0` = silencio, `1` = alerta, `2` = bienvenida)
-
-
-
-\## Interfaces
+- Columna `Valor`: estado actual (`0` = silencio, `1` = alerta, `2` = bienvenida)
 
 
 
-\### Interfaz de Control (Alumno)
+## Interfaces
+
+
+
+### Interfaz de Control (Alumno)
 
 Accesible vía QR code desde cualquier dispositivo móvil.
 
 
 
-!\[Interfaz de control](control.png)
+![Interfaz de control](control.png)
 
 
 
 Dos botones de acción:
 
-\- 🔔 \*\*TIMBRE / BIENVENIDA\*\* → Escribe `2` en Google Sheets
+- 🔔 **TIMBRE / BIENVENIDA** → Escribe `2` en Google Sheets
 
-\- 🚨 \*\*ACTIVAR ALARMA\*\* → Escribe `1` en Google Sheets
+- 🚨 **ACTIVAR ALARMA** → Escribe `1` en Google Sheets
 
 
 
-\### Dashboard de Monitoreo (Profesor)
+### Dashboard de Monitoreo (Profesor)
 
 Panel en tiempo real con actualización cada 3 segundos.
 
 
 
-!\[Dashboard de monitoreo](dashboard.png)
+![Dashboard de monitoreo](dashboard.png)
 
 
 
 Estados visuales:
 
-\- 🟢 \*\*SISTEMA SEGURO\*\* → Valor `0` (sin eventos)
+- 🟢 **SISTEMA SEGURO** → Valor `0` (sin eventos)
 
-\- 🔴 \*\*INTRUSO DETECTADO\*\* → Valor `1` (modo alerta con sonido, directamente reproducido desde internet)
+- 🔴 **INTRUSO DETECTADO** → Valor `1` (modo alerta con sonido, directamente reproducido desde internet)
 
-\- 🔔 \*\*VISITANTE EN PUERTA\*\* → Valor `2` (bienvenida con sonido, directamente reproducido desde internet)
+- 🔔 **VISITANTE EN PUERTA** → Valor `2` (bienvenida con sonido, directamente reproducido desde internet)
 
 
 
-\## Aplicación con Hardware Real
+## Aplicación con Hardware Real
 
 
 
@@ -144,31 +144,31 @@ Aunque esta demo funciona 100% desde el navegador, la arquitectura es directamen
 
 |---|---|
 
-| \*\*ESP32 / ESP8266\*\* | `HTTPClient` hace POST al webhook al detectar evento |
+| **ESP32 / ESP8266** | `HTTPClient` hace POST al webhook al detectar evento |
 
-| \*\*Arduino + Shield Wi-Fi\*\* | Librería `WiFiClient` envía request HTTP |
+| **Arduino + Shield Wi-Fi** | Librería `WiFiClient` envía request HTTP |
 
-| \*\*Raspberry Pi\*\* | Script Python con `requests` llama al webhook |
+| **Raspberry Pi** | Script Python con `requests` llama al webhook |
 
-| \*\*Sensor de movimiento (PIR)\*\* | Al detectar movimiento → POST a `/recibir-accion` con `action: alerta` |
+| **Sensor de movimiento (PIR)** | Al detectar movimiento → POST a `/recibir-accion` con `action: alerta` |
 
-| \*\*Cámara con visión artificial\*\* | OpenCV detecta evento → POST al webhook |
+| **Cámara con visión artificial** | OpenCV detecta evento → POST al webhook |
 
-| \*\*Sensor de puerta/ventana\*\* | Al abrirse → POST con `action: bienvenida` |
+| **Sensor de puerta/ventana** | Al abrirse → POST con `action: bienvenida` |
 
 
 
-\*\*Ejemplo de código para ESP32:\*\*
+**Ejemplo de código para ESP32:**
 
 ```cpp
 
-\#include <WiFi.h>
+#include <WiFi.h>
 
-\#include <HTTPClient.h>
+#include <HTTPClient.h>
 
 
 
-const char\* webhookUrl = "https://your-n8n-domain.com/webhook/recibir-accion";
+const char* webhookUrl = "https://your-n8n-domain.com/webhook/recibir-accion";
 
 
 
@@ -180,7 +180,7 @@ void triggerAlarm() {
 
 &nbsp; http.addHeader("Content-Type", "application/json");
 
-&nbsp; http.POST("{\\"action\\":\\"alerta\\",\\"device\\":\\"esp32\_sensor\\"}");
+&nbsp; http.POST("{"action":"alerta","device":"esp32_sensor"}");
 
 &nbsp; http.end();
 
@@ -190,27 +190,27 @@ void triggerAlarm() {
 
 
 
-\## Requisitos
+## Requisitos
 
 
 
-\- \*\*n8n\*\* v2.4.6+ (self-hosted con dominio público o túnel)
+- **n8n** v2.4.6+ (self-hosted con dominio público o túnel)
 
-\- \*\*Google Sheets\*\* con cuenta de Google y OAuth configurado en n8n
+- **Google Sheets** con cuenta de Google y OAuth configurado en n8n
 
-\- \*\*Navegador moderno\*\* (para las interfaces HTML)
-
-
-
-> IMPORTANTE: El webhook debe ser accesible públicamente para que los dispositivos móviles puedan conectarse. Si usas n8n local, puedes usar \[ngrok](https://ngrok.com) o \[Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/) como alternativa gratuita. Actualmente yo uso un PaaS de Digital Ocean, la cual recomiendo mucho
+- **Navegador moderno** (para las interfaces HTML)
 
 
 
-\## Instalación
+> IMPORTANTE: El webhook debe ser accesible públicamente para que los dispositivos móviles puedan conectarse. Si usas n8n local, puedes usar [ngrok](https://ngrok.com) o [Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/) como alternativa gratuita. Actualmente yo uso un PaaS de Digital Ocean, la cual recomiendo mucho
 
 
 
-\### 1. Preparar Google Sheets
+## Instalación
+
+
+
+### 1. Preparar Google Sheets
 
 
 
@@ -226,43 +226,43 @@ Crea una hoja de cálculo nueva con esta estructura exacta:
 
 
 
-Copia el \*\*ID de la hoja\*\* desde la URL:
+Copia el **ID de la hoja** desde la URL:
 
 ```
 
-https://docs.google.com/spreadsheets/d/\[ESTE\_ES\_EL\_ID]/edit
+https://docs.google.com/spreadsheets/d/[ESTE_ES_EL_ID]/edit
 
 ```
 
 
 
-\### 2. Configurar credenciales en n8n
+### 2. Configurar credenciales en n8n
 
 
 
-1\. En n8n: \*\*Credentials → New → Google Sheets OAuth2\*\*
+1. En n8n: **Credentials → New → Google Sheets OAuth2**
 
-2\. Seguir el flujo de autenticación con tu cuenta de Google
+2. Seguir el flujo de autenticación con tu cuenta de Google
 
-3\. Guardar con el nombre: `Google Sheets account`
-
-
-
-\### 3. Importar el workflow
+3. Guardar con el nombre: `Google Sheets account`
 
 
 
-1\. En n8n: \*\*Workflows → Import from File\*\*
-
-2\. Seleccionar `workflow.json`
-
-3\. En los 3 nodos de Google Sheets, seleccionar tu hoja usando el ID del paso 1
-
-4\. Activar el workflow con el toggle \*\*Active\*\*
+### 3. Importar el workflow
 
 
 
-\### 4. Configurar variables
+1. En n8n: **Workflows → Import from File**
+
+2. Seleccionar `workflow.json`
+
+3. En los 3 nodos de Google Sheets, seleccionar tu hoja usando el ID del paso 1
+
+4. Activar el workflow con el toggle **Active**
+
+
+
+### 4. Configurar variables
 
 
 
@@ -274,7 +274,7 @@ Ver `.env.example` para referencia completa de variables.
 
 
 
-\### 5. Generar el QR
+### 5. Generar el QR
 
 
 
@@ -288,11 +288,11 @@ https://your-n8n-domain.com/webhook/iot-website
 
 
 
-Genera el QR con cualquier servicio online (\[qr-code-generator.com](https://www.qr-code-generator.com)) y proyéctalo para que los alumnos escaneen.
+Genera el QR con cualquier servicio online ([qr-code-generator.com](https://www.qr-code-generator.com)) y proyéctalo para que los alumnos escaneen.
 
 
 
-\## URLs del Sistema
+## URLs del Sistema
 
 
 
@@ -314,7 +314,7 @@ Una vez activo, el sistema expone estas rutas:
 
 
 
-\## Estructura del Proyecto
+## Estructura del Proyecto
 
 
 
@@ -342,7 +342,7 @@ iot-con-n8n/
 
 
 
-\## Por qué n8n como servidor IoT
+## Por qué n8n como servidor IoT
 
 
 
@@ -350,21 +350,21 @@ iot-con-n8n/
 
 |---|---|---|
 
-| \*\*Setup\*\* | Instalar Node.js, Express, configurar rutas | Importar JSON |
+| **Setup** | Instalar Node.js, Express, configurar rutas | Importar JSON |
 
-| \*\*Base de datos\*\* | PostgreSQL, MongoDB, Redis | Google Sheets / cualquier nodo |
+| **Base de datos** | PostgreSQL, MongoDB, Redis | Google Sheets / cualquier nodo |
 
-| \*\*Frontend\*\* | HTML separado, servidor estático | Nodo Code con HTML embebido |
+| **Frontend** | HTML separado, servidor estático | Nodo Code con HTML embebido |
 
-| \*\*Escalabilidad\*\* | Código adicional | Agregar nodos al workflow |
+| **Escalabilidad** | Código adicional | Agregar nodos al workflow |
 
-| \*\*Costo\*\* | VPS + dependencias | n8n ya instalado |
+| **Costo** | VPS + dependencias | n8n ya instalado |
 
-| \*\*Curva de aprendizaje\*\* | Alta | Baja (visual) |
+| **Curva de aprendizaje** | Alta | Baja (visual) |
 
 
 
-\## 📄 Licencia
+## 📄 Licencia
 
 
 
@@ -372,15 +372,15 @@ MIT
 
 
 
-\## Autor
+## Autor
 
 
 
 Mgs. Robinson Barrazueta - Ingeniería de Datos y Automatización
 
-\*\*Processia Ops\*\* - Automatización de procesos empresariales
+**Processia Ops** - Automatización de procesos empresariales
 
-Ecuador 🇪🇨 · \[processia.online](https://processia.online)
+Ecuador 🇪🇨 · [processia.online](https://processia.online)
 
 
 
