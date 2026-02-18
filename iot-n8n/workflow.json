@@ -1,0 +1,540 @@
+{
+  "name": "IoT Educativo",
+  "nodes": [
+    {
+      "parameters": {
+        "jsCode": "// Definimos el HTML completo dentro de las comillas invertidas\nconst miCodigoHtml = `\n<!DOCTYPE html>\n<html lang=\"es\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\">\n    <title>Control Remoto IoT</title>\n    <style>\n        /* ESTILOS */\n        body { background-color: #0d1117; color: #c9d1d9; font-family: 'Courier New', monospace; text-align: center; padding: 20px; display: flex; flex-direction: column; justify-content: center; min-height: 100vh; margin: 0; }\n        h1 { color: #58a6ff; text-shadow: 0 0 10px rgba(88, 166, 255, 0.5); font-size: 24px; margin-bottom: 10px;}\n        p { font-size: 14px; opacity: 0.8; margin-bottom: 30px; }\n        \n        /* BOTONES */\n        .iot-btn { display: block; width: 100%; padding: 25px; margin-bottom: 20px; font-size: 18px; font-weight: bold; text-transform: uppercase; border: none; border-radius: 12px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }\n        .iot-btn:active { transform: scale(0.95); }\n        \n        /* COLORES Y ANIMACIÓN */\n        .btn-welcome { background: linear-gradient(135deg, #2ea043 0%, #238636 100%); color: white; border: 2px solid #3fb950; }\n        .btn-alert { background: linear-gradient(135deg, #da3633 0%, #b62324 100%); color: white; border: 2px solid #f85149; animation: pulse 2s infinite; }\n        \n        @keyframes pulse { \n            0% { box-shadow: 0 0 0 0 rgba(218, 54, 51, 0.4); } \n            70% { box-shadow: 0 0 0 15px rgba(218, 54, 51, 0); } \n            100% { box-shadow: 0 0 0 0 rgba(218, 54, 51, 0); } \n        }\n        \n        /* CONSOLA */\n        #console-log { margin-top: 20px; background: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 10px; font-size: 12px; color: #8b949e; text-align: left; min-height: 40px; }\n        .success { color: #3fb950 !important; border-color: #3fb950 !important; }\n        .error { color: #f85149 !important; border-color: #f85149 !important; }\n    </style>\n</head>\n<body>\n\n    <h1>🏠 SMART HOME CONTROL</h1>\n    <p>Conectado al servidor: {{TEACHER_NAME}}<br>Estado: EN LÍNEA 🟢</p>\n\n    <button class=\"iot-btn btn-welcome\" onclick=\"sendCommand('bienvenida')\">🔔 TIMBRE / BIENVENIDA</button>\n    <button class=\"iot-btn btn-alert\" onclick=\"sendCommand('alerta')\">🚨 ACTIVAR ALARMA 🚨</button>\n\n    <div id=\"console-log\">> Esperando comando...</div>\n\n    <script>\n        // *** URL DEL WEBHOOK ***\n        const WEBHOOK_URL = '{{WEBHOOK_BASE_URL}}/webhook/recibir-accion'; \n\n        async function sendCommand(actionType) {\n            const logDiv = document.getElementById('console-log');\n            \n            // 1. Feedback Visual Inmediato (Usando suma de texto para no romper el código)\n            logDiv.innerHTML = '> Enviando paquete de datos: <strong>' + actionType.toUpperCase() + '</strong>...';\n            \n            // 2. Feedback Táctil (Vibración)\n            if (navigator.vibrate) navigator.vibrate(50); \n\n            try {\n                const response = await fetch(WEBHOOK_URL, {\n                    method: 'POST',\n                    headers: { 'Content-Type': 'application/json' },\n                    body: JSON.stringify({ \n                        action: actionType,\n                        device: 'mobile_student',\n                        timestamp: new Date().toISOString()\n                    })\n                });\n\n                if (response.ok) {\n                    // ÉXITO: Mensaje verde y vibración doble\n                    logDiv.innerHTML = '> COMANDO RECIBIDO EN SERVIDOR ✅<br>> Acción ejecutada: ' + actionType;\n                    logDiv.className = 'success'; // Cambia el color del texto a verde\n                    if (navigator.vibrate) navigator.vibrate([100, 50, 100]); \n                } else {\n                    throw new Error('Error en el servidor');\n                }\n\n            } catch (error) {\n                // ERROR: Mensaje rojo y vibración larga\n                logDiv.innerHTML = '> ERROR DE CONEXIÓN ❌<br>> Revisa tu internet.';\n                logDiv.className = 'error';\n                if (navigator.vibrate) navigator.vibrate(500); \n            }\n        }\n    </script>\n</body>\n</html>\n`;\n\n// Retornamos el paquete listo para el siguiente nodo\nreturn [\n  {\n    json: {\n      paginaparaqr: miCodigoHtml\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        208,
+        32
+      ],
+      "id": "d86b62f8-92ea-40aa-bab7-56c5b15e4f4a",
+      "name": "JS: página web para control"
+    },
+    {
+      "parameters": {
+        "path": "iot-website",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        32,
+        32
+      ],
+      "id": "9b1d9cf3-7cbb-4213-8b8f-da9e900e9adc",
+      "name": "Webhook website",
+      "webhookId": "{{WEBHOOK_ID_WEBSITE}}"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.paginaparaqr }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "text/html"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        384,
+        32
+      ],
+      "id": "a2646510-683d-444f-b5f1-00e8a2a1c585",
+      "name": "Cierre Webhook"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "recibir-accion",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        32,
+        208
+      ],
+      "id": "a8353fde-2d64-462c-86d5-1c1c0f1491a6",
+      "name": "Webhook conexión botones",
+      "webhookId": "{{WEBHOOK_ID}}"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "{{GOOGLE_SHEET_ID}}",
+          "mode": "list",
+          "cachedResultName": "Demo_IoT",
+          "cachedResultUrl": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": ""
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID": "control",
+            "Valor": "={{ $json.body.action == 'alerta' ? 1 : 2 }}"
+          },
+          "matchingColumns": [
+            "ID"
+          ],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Valor",
+              "displayName": "Valor",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        208,
+        208
+      ],
+      "id": "b7462a11-8305-47dd-bebf-13fd8bc89ed7",
+      "name": "Actualización estado alarma",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "OK",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        384,
+        208
+      ],
+      "id": "d5462d7b-8991-4b95-9ec5-f61551109e28",
+      "name": "Cierre Webhook1"
+    },
+    {
+      "parameters": {
+        "path": "panel-profesor",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        32,
+        400
+      ],
+      "id": "177e9d69-f148-4a57-bcf0-d02550a221b9",
+      "name": "Webhook Dashboard",
+    },
+    {
+      "parameters": {
+        "jsCode": "const dashboardHtml = `\n    <!DOCTYPE html>\n    <html>\n    <head>\n        <title>SISTEMA DE MONITOREO</title>\n        <style>\n            body { background: #000; color: #0f0; font-family: monospace; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; overflow: hidden; margin: 0; }\n            \n            /* RADAR ANIMADO */\n            .radar { width: 200px; height: 200px; border: 2px solid #0f0; border-radius: 50%; position: relative; box-shadow: 0 0 20px #0f0; background: radial-gradient(circle, transparent 60%, rgba(0,255,0,0.2)); }\n            .radar::after { content: ''; position: absolute; top: 50%; left: 50%; width: 50%; height: 2px; background: #0f0; transform-origin: 0 0; animation: scan 2s linear infinite; }\n            @keyframes scan { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }\n            \n            h1 { margin-top: 30px; text-shadow: 0 0 10px #0f0; }\n            #log { margin-top: 20px; color: #555; font-size: 12px; }\n            \n            /* ESTADO DE ALERTA */\n            .alert-mode { background: #200 !important; color: #f00 !important; }\n            .alert-mode .radar { border-color: #f00; box-shadow: 0 0 50px #f00; }\n            .alert-mode .radar::after { background: #f00; animation-duration: 0.5s; }\n    \n            /* BOTON INICIAL */\n            #init-btn { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.95); z-index:99; display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:24px; cursor:pointer; color: white; text-align: center; padding: 20px;}\n            .pulse-text { animation: pulse 1.5s infinite; color: #0f0; font-weight: bold; margin-top: 20px;}\n            @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }\n        </style>\n    </head>\n    <body>\n    \n        <div id=\"init-btn\" onclick=\"iniciar()\">\n            <div>INICIAR SISTEMA DE VIGILANCIA</div>\n            <div class=\"pulse-text\">CLICK AQUÍ PARA HABILITAR AUDIO</div>\n        </div>\n    \n        <div class=\"radar\" id=\"radar-visual\"></div>\n        <h1 id=\"status\">SISTEMA SEGURO</h1>\n        <div id=\"log\">Esperando conexión satelital...</div>\n        \n        <audio id=\"snd-alerta\" src=\"https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg\"></audio>\n        <audio id=\"snd-bienvenida\" src=\"https://actions.google.com/sounds/v1/alarms/mechanical_clock_ring.ogg\"></audio>\n    \n        <script>\n            // *** URL (Apunta al Webhook de CONSULTA) ***\n            const URL_CONSULTA = '{{WEBHOOK_BASE_URL}}/webhook/consultar-estado'; \n    \n            // Variables de control\n            let stopTimer = null;\n            let tiempoBloqueoVisual = 0; // Para mantener el color rojo unos segundos extra\n    \n            function iniciar() {\n                document.getElementById('init-btn').style.display = 'none';\n                // Desbloqueo silencioso\n                const a1 = document.getElementById('snd-alerta');\n                const a2 = document.getElementById('snd-bienvenida');\n                a1.volume = 0; a2.volume = 0;\n                a1.play().then(() => { a1.pause(); a1.currentTime=0; a1.volume=1; });\n                a2.play().then(() => { a2.pause(); a2.currentTime=0; a2.volume=1; });\n    \n                // Intervalo de 3 segundos (seguro para Google Sheets)\n                setInterval(consultarNube, 3000); \n            }\n    \n            // --- CONTROLADOR DE AUDIO ---\n            function reproducirControlado(idAudio) {\n                const alerta = document.getElementById('snd-alerta');\n                const bienvenida = document.getElementById('snd-bienvenida');\n                const target = document.getElementById(idAudio);\n    \n                // Detener todo\n                alerta.pause(); alerta.currentTime = 0;\n                bienvenida.pause(); bienvenida.currentTime = 0;\n                if (stopTimer) clearTimeout(stopTimer);\n    \n                // Play\n                target.play().catch(e => console.log(\"Error play:\", e));\n    \n                // Cortar a los 4 segundos\n                stopTimer = setTimeout(() => {\n                    target.pause();\n                    target.currentTime = 0;\n                }, 4000);\n            }\n    \n            async function consultarNube() {\n                try {\n                    const res = await fetch(URL_CONSULTA);\n                    const data = await res.json();\n                    \n                    const radar = document.getElementById('radar-visual');\n                    const texto = document.getElementById('status');\n                    const body = document.body;\n                    \n                    // Debug visual\n                    document.getElementById('log').innerText = \"Ultimo escaneo: \" + new Date().toLocaleTimeString();\n    \n                    if (data.sonar == 1) {\n                        // --- MODO ALARMA ---\n                        texto.innerText = \"⚠️ INTRUSO DETECTADO ⚠️\";\n                        body.classList.add('alert-mode');\n                        reproducirControlado('snd-alerta');\n                        \n                        // Bloqueamos el reseteo visual por 5 segundos (4s del audio + 1s extra)\n                        tiempoBloqueoVisual = Date.now() + 5000;\n                    } \n                    else if (data.sonar == 2) {\n                        // --- MODO BIENVENIDA ---\n                        texto.innerText = \"🔔 VISITANTE EN PUERTA\";\n                        body.classList.remove('alert-mode'); \n                        reproducirControlado('snd-bienvenida');\n                        \n                        // Bloqueamos el reseteo visual por 5 segundos\n                        tiempoBloqueoVisual = Date.now() + 5000;\n                    } \n                    else {\n                        // --- MODO SILENCIO ---\n                        // Solo reseteamos a verde si YA PASÓ el tiempo de bloqueo\n                        if (Date.now() > tiempoBloqueoVisual) {\n                            texto.innerText = \"SISTEMA SEGURO\";\n                            body.classList.remove('alert-mode');\n                        }\n                        // Si no ha pasado el tiempo, no hacemos nada (se queda en rojo/alerta)\n                    }\n                } catch (e) { \n                    console.log(\"Conectando...\"); \n                }\n            }\n        </script>\n    </body>\n    </html>\n`;\n\nreturn [{ json: { html_profe: dashboardHtml } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        208,
+        400
+      ],
+      "id": "115c449e-c015-4bb1-9481-dc836b3117f2",
+      "name": "JS: Dashboard estado"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.html_profe }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "text/html"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        384,
+        400
+      ],
+      "id": "e0e7e5c6-c2d4-4833-be5a-070c6b50d961",
+      "name": "Cierre Webhook2"
+    },
+    {
+      "parameters": {
+        "path": "consultar-estado",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        32,
+        592
+      ],
+      "id": "b664fc4b-a4c9-4815-965a-fe4b9da8a7a6",
+      "name": "Webhook Actualización estado",
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "{{GOOGLE_SHEET_ID}}",
+          "mode": "list",
+          "cachedResultName": "Demo_IoT",
+          "cachedResultUrl": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": ""
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "ID",
+              "lookupValue": "control"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        208,
+        592
+      ],
+      "id": "c1e2a387-891b-434c-a119-06e9994f6f0c",
+      "name": "Análisis de estado variable",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "d23363b4-7a32-47b0-8668-f04032147096",
+              "leftValue": "={{ $json.Valor }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        384,
+        592
+      ],
+      "id": "d94b3eff-4230-4672-bbf2-d2e8e3536eca",
+      "name": "Si la variable es diferente a 0"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "{{GOOGLE_SHEET_ID}}",
+          "mode": "list",
+          "cachedResultName": "Demo_IoT",
+          "cachedResultUrl": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": ""
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID": "control",
+            "Valor": "0"
+          },
+          "matchingColumns": [
+            "ID"
+          ],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Valor",
+              "displayName": "Valor",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        608,
+        496
+      ],
+      "id": "f3c7d192-217a-4989-acf3-1ce5f8962fc2",
+      "name": "Regresa la variable a 0",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"sonar\": $('Análisis de estado variable').item.json.Valor } }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        800,
+        496
+      ],
+      "id": "93872d7d-a967-42ae-ace2-78d65379cbad",
+      "name": "Cierre Webhook3"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={ \"sonar\": 0 }",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        608,
+        688
+      ],
+      "id": "eb2413b1-98f7-4f01-b5b0-3dedd1ed277a",
+      "name": "Cierre Webhook4"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "JS: página web para control": {
+      "main": [
+        [
+          {
+            "node": "Cierre Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook website": {
+      "main": [
+        [
+          {
+            "node": "JS: página web para control",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook conexión botones": {
+      "main": [
+        [
+          {
+            "node": "Actualización estado alarma",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Actualización estado alarma": {
+      "main": [
+        [
+          {
+            "node": "Cierre Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook Dashboard": {
+      "main": [
+        [
+          {
+            "node": "JS: Dashboard estado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "JS: Dashboard estado": {
+      "main": [
+        [
+          {
+            "node": "Cierre Webhook2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook Actualización estado": {
+      "main": [
+        [
+          {
+            "node": "Análisis de estado variable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Análisis de estado variable": {
+      "main": [
+        [
+          {
+            "node": "Si la variable es diferente a 0",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Si la variable es diferente a 0": {
+      "main": [
+        [
+          {
+            "node": "Regresa la variable a 0",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Cierre Webhook4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Regresa la variable a 0": {
+      "main": [
+        [
+          {
+            "node": "Cierre Webhook3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Guayaquil",
+  },
+  "tags": []
+}
